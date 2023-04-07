@@ -8,6 +8,8 @@ top_face_size = (int(image_size[0]* 0.71), int(image_size[0]* 0.71))
 
 folder = f"imagefolders/{sys.argv[1]}"
 
+frame = int(sys.argv[2])
+
 
 def DarkenImage(image, value):
 
@@ -62,6 +64,9 @@ def CreateThumbnail(filename):
     basest_image = Image.new(mode='RGBA', size=(int(image_size[0] * 1.1), int(image_size[0] * 1.1)), color=(0,0,0,0))
 
     sprite_image = Image.open(f"{folder}/{filename}")
+    
+    if ".gif" in filename:
+        sprite_image.seek(frame)
 
     top_face = FormTopFace(sprite_image)
     left_side_face = FormSideFace(sprite_image)
@@ -94,4 +99,9 @@ for i in range(len(images)):
     image = CreateThumbnail(images[i])
     spritesheet.paste(image, mask=image, box=[i * 110, 0])
 
-spritesheet.save(f"{folder}.png")
+name_string = f"{folder}"
+
+if ".gif" in images[0]:
+    name_string += f"_{frame}"
+
+spritesheet.save(f"{name_string}.png")
